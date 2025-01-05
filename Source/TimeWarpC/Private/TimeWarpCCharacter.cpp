@@ -11,6 +11,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "DoorPortal.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -41,6 +42,9 @@ ATimeWarpCCharacter::ATimeWarpCCharacter()
 	GunMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh"));
 	GunMesh->SetupAttachment(Mesh1P, "GripPoint");
 
+	// Instantiate Levels Array with each game level
+	levels.Add("Asian_Village_Demo");
+	levels.Add("Gym_Map");
 }
 
 void ATimeWarpCCharacter::BeginPlay()
@@ -71,11 +75,23 @@ void ATimeWarpCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(TimeSpeedAction, ETriggerEvent::Triggered, this, &ATimeWarpCCharacter::TimeSpeed);
 
 		EnhancedInputComponent->BindAction(ResumeTimeAction, ETriggerEvent::Triggered, this, &ATimeWarpCCharacter::ResumeTime);
+
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ATimeWarpCCharacter::EngageObject);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void ATimeWarpCCharacter::SwitchLevel()
+{
+	// Gets the name of the current map
+	FString current = GetWorld()->GetMapName();
+	current.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+
+	// Open Level 
+	UGameplayStatics::OpenLevel(GetWorld(), "Gym_Map");
 }
 
 
@@ -156,6 +172,34 @@ void ATimeWarpCCharacter::Shoot(const FInputActionValue& Value)
 			RewindTimeSpeed = 0.f;
 			Cast<ITimeWarpInterface>(Hit->GetActor())->TimePause();
 		}
+		
 	}
 
+}
+
+void ATimeWarpCCharacter::EngageObject(const FInputActionValue& Value)
+{
+	if (FireAnimation != nullptr)
+	{
+		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
+		if (AnimInstance != nullptr)
+		{
+			AnimInstance->Montage_Play(FireAnimation, 1.f);
+		}
+	}
+
+	FVector StartLocation = GunMesh->GetSocketLocation("Ammo");
+	FVector EndLocation = StartLocation + (FirstPersonCameraComponent->GetForwardVector() * 1500.f);
+	FHitResult* Hit = new FHitResult();
+
+	UKismetSystemLibrary::SphereTraceSingle(this, StartLocation, EndLocation, 12.f, UEngineTypes::ConvertToTraceType(ECC_Visibility), false, TArray<AActor*>(), EDrawDebugTrace::None, *Hit, true);
+
+	if (Hit->GetActor() != nullptr)
+	{
+		ADoorPortal* door = Cast<ADoorPortal>(Hit->GetActor());
+		if (door)
+		{
+			SwitchLevel();
+		}
+	}
 }
