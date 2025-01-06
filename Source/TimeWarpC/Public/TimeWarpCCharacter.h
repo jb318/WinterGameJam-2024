@@ -78,6 +78,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Time)
 	TArray<AActor*> ActiveTargets;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName newMap;
+
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
@@ -105,10 +108,11 @@ public:
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
 	// Warps character to different levels
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SwitchLevel();
 
 	// Array of each level name 
 	TArray<FString> levels;
+
 };
 

@@ -16,6 +16,7 @@ void ADoorPortal::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
 }
 
 // Called every frame
@@ -23,6 +24,12 @@ void ADoorPortal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ADoorPortal::unlockDoor()
+{
+		canEnter = true;
+		
 }
 
 
