@@ -23,5 +23,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Opens actor when you clicked all buttons
+	UFUNCTION(BlueprintCallable)
+	void unlockDoor();
+
+	int buttonGoal;
+	
+	int buttonsClicked;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool canEnter;
 
 };

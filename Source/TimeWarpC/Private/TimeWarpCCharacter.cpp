@@ -91,7 +91,7 @@ void ATimeWarpCCharacter::SwitchLevel()
 	current.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
 	// Open Level 
-	UGameplayStatics::OpenLevel(GetWorld(), "Gym_Map");
+	UGameplayStatics::OpenLevel(GetWorld(), newMap );
 }
 
 
@@ -196,10 +196,22 @@ void ATimeWarpCCharacter::EngageObject(const FInputActionValue& Value)
 
 	if (Hit->GetActor() != nullptr)
 	{
+		
 		ADoorPortal* door = Cast<ADoorPortal>(Hit->GetActor());
 		if (door)
 		{
-			SwitchLevel();
+			
+			if (door->canEnter)
+			{
+				// Switches Level while opening door
+				door->AddActorWorldRotation(FRotator(0, 90, 0));
+				SwitchLevel();
+
+				// Not working yet
+				door->canEnter = false;
+				
+			} 
+			
 		}
 	}
 }
