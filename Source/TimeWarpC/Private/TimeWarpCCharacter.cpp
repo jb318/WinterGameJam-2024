@@ -51,6 +51,40 @@ void ATimeWarpCCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	// Initializes Stats Array with Stats
+	int stats[] = { level, health, strength, experience };
+	
+	// Sets Listing of Stats
+	for (int i = 0; i < sizeof(StatsArray) / sizeof(StatsArray[0]); i++) {
+		
+		// Switch value of J because sizeof stats is 15 for some reason
+		for (int j = 0; j < sizeof(stats) / sizeof(*stats); j++) {
+			switch (j) {
+			case 0:
+				stats[j]++;
+				StatsArray[i][j] = stats[j];
+				break;
+			case 1:
+				stats[j] *= 1.25;
+				StatsArray[i][j] = stats[j];
+				break;
+			case 2:
+				stats[j] += 5;
+				StatsArray[i][j] = stats[j];
+				break;
+			case 3:
+				stats[j] += 50;
+				StatsArray[i][j] = stats[j];
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("LevelAccessed: %d\nPlayer Stats:\nLevel: %.0f\nHP: %.0f\nStrengh: %.0f\nExperience: %.0f"), accessLevelData, StatsArray[accessLevelData - 1][0], StatsArray[accessLevelData - 1][1], StatsArray[accessLevelData - 1][2], StatsArray[accessLevelData - 1][3]));
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -94,6 +128,12 @@ void ATimeWarpCCharacter::SwitchLevel()
 	UGameplayStatics::OpenLevel(GetWorld(), newMap );
 }
 
+
+void ATimeWarpCCharacter::UpdatePlayerLevel()
+{
+	accessLevelData++;
+	
+}
 
 void ATimeWarpCCharacter::Move(const FInputActionValue& Value)
 {
