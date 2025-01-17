@@ -81,6 +81,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName newMap;
 
+	// Players Stats and Variables
+	float StatsArray[100][4];
+
+	float level = 0;
+	float health = 8;
+	float strength = 0;
+	float experience = 50;
+
+	// Determines What Level and Stats the Player Has
+	UPROPERTY(EditAnywhere)
+	int accessLevelData;
+
+	// Updates Player Level
+	UFUNCTION()
+	void UpdatePlayerLevel();
+
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
