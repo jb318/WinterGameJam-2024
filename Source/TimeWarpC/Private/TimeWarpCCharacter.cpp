@@ -82,9 +82,9 @@ void ATimeWarpCCharacter::BeginPlay()
 			}
 		}
 	}
-	if (GEngine) {
+	/*if (GEngine) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("LevelAccessed: %d\nPlayer Stats:\nLevel: %.0f\nHP: %.0f\nStrengh: %.0f\nExperience: %.0f"), accessLevelData, StatsArray[accessLevelData - 1][0], StatsArray[accessLevelData - 1][1], StatsArray[accessLevelData - 1][2], StatsArray[accessLevelData - 1][3]));
-	}
+	}*/
 }
 
 //////////////////////////////////////////////////////////////////////////// Input

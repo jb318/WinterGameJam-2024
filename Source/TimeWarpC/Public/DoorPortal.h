@@ -32,6 +32,6 @@ public:
 	int buttonsClicked;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool canEnter;
+	bool canEnter = true;
 
 };

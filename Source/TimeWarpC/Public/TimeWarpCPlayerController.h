@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "ThirdPersonCharacter.h"
 #include "TimeWarpCPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -16,16 +19,42 @@ class TIMEWARPC_API ATimeWarpCPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	ATimeWarpCPlayerController();
+
 protected:
+
+	virtual void BeginPlay() override;
 
 	/** Input Mapping Context to be used for player input */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputMappingContext* InputMappingContext;
 
-	// Begin Actor interface
-protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveAction;
 
-	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* LookAction;
 
-	// End Actor interface
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* JumpAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* InteractAction;
+
+public:
+	// Sets up input mapping context on character controller possesses
+	virtual void SetupInputComponent() override;
+
+	// Player character class reference
+	UPROPERTY()
+	AThirdPersonCharacter* PlayerCharacter;
+
+private:
+	// Input events
+	void Move(const FInputActionValue& value);
+	void Look(const FInputActionValue& value);
+	void Jump(const FInputActionValue& value);
+	void Interact(const FInputActionValue& value);
+	
 };
