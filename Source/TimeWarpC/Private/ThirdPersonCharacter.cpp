@@ -20,47 +20,5 @@ void AThirdPersonCharacter::BeginPlay()
 	
 }
 
-void AThirdPersonCharacter::MoveForward(float Value)
-{
-	// Find out if we have controller for character
-	if ((Controller) && Value != 0.0f) {
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
-	}
-}
-
-void AThirdPersonCharacter::MoveRight(float Value)
-{
-	// Find out if we have controller for character
-	if ((Controller) && Value != 0.0f) {
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		AddMovementInput(Direction, Value);
-	}
-}
-
 // Called every frame
-void AThirdPersonCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-// Called to bind functionality to input
-void AThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	// Axis mappinds for player and camera movement
-	PlayerInputComponent->BindAxis("MoveForward", this, &AThirdPersonCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AThirdPersonCharacter::MoveRight);
-
-	// For First Person Character*
-	PlayerInputComponent->BindAxis("LookUp", this, &AThirdPersonCharacter::AddControllerPitchInput); //camera movement vertical
-	PlayerInputComponent->BindAxis("Turn", this, &AThirdPersonCharacter::AddControllerYawInput); //camera movement horizontal
-
-}
 

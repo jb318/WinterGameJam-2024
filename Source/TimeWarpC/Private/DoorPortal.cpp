@@ -16,7 +16,7 @@ void ADoorPortal::BeginPlay()
 {
 	Super::BeginPlay();
 	
-
+	
 }
 
 // Called every frame
